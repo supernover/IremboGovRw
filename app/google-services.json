@@ -1,0 +1,78 @@
+{
+  "project_info": {
+    "project_number": "278492216540",
+    "firebase_url": "https://advanced-android-webview-56350.firebaseio.com",
+    "project_id": "advanced-android-webview-56350",
+    "storage_bucket": "advanced-android-webview-56350.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278492216540:android:4938b5f11b65bda1408819",
+        "android_client_info": {
+          "package_name": "com.RwandaGov.Irembo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278492216540-9t3el7hs7du95k5e6v1lqcns20qniehf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.RwandaGov.Irembo",
+            "certificate_hash": "1e5e0a7a2a47347d1f23f4911f82d1be55044155"
+          }
+        },
+        {
+          "client_id": "278492216540-nbcq062qenrjsjm3qk85icmrskgb38cd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6TVfepu1qp8Xnu4M0DFhsbQZHJSSL68k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278492216540-nbcq062qenrjsjm3qk85icmrskgb38cd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278492216540:android:0ee52f8e0f301870408819",
+        "android_client_info": {
+          "package_name": "com.supernover.JobInRwanda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278492216540-nbcq062qenrjsjm3qk85icmrskgb38cd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6TVfepu1qp8Xnu4M0DFhsbQZHJSSL68k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278492216540-nbcq062qenrjsjm3qk85icmrskgb38cd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-3063877521249388~6723140118"
+    }
+  ],
+  "configuration_version": "1"
+}
