@@ -48,13 +48,16 @@ import android.widget.Toast;
 
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.onesignal.OneSignal;
+import com.shashank.sony.fancygifdialoglib.FancyGifDialog;
+import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
+import com.varunjohn1990.iosdialogs4android.IOSDialog;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity
 
     final String admob_app_id = "ca-app-pub-3063877521249388~5560783409";
     final String admob_inter_id = "ca-app-pub-3063877521249388/9752762554";
+    final String admob_banner_id = "ca-app-pub-3063877521249388/4676330151";
     FrameLayout frameLayout;
 
     @Override
@@ -126,7 +130,7 @@ public class MainActivity extends AppCompatActivity
 
         //setLocationPermission();
 
-        oneSignalInit();
+        //oneSignalInit();
 
         //checkPermission();//storage
 
@@ -135,7 +139,47 @@ public class MainActivity extends AppCompatActivity
         setAdmob();
 
         //setRTL();
+
+        /*new FancyGifDialog.Builder(this)
+                .setTitle("landscape mode")
+                .setMessage("please rotate your device to landscape for best browsing experience.")
+                .setPositiveBtnText("Ok")
+                .setPositiveBtnBackground(R.color.infoColor)
+                .setGifResource(R.drawable.gif1)   //Pass your Gif here
+                .isCancellable(true)
+                .OnPositiveClicked(new FancyGifDialogListener() {
+                    @Override
+                    public void OnClick() {
+                        Toast.makeText(MainActivity.this,"Ok",Toast.LENGTH_SHORT).show();
+                    }
+                }).build();*/
+
+        new FancyGifDialog.Builder(this)
+                .setTitle("landscape mode") // You can also send title like R.string.from_resources
+                .setMessage("please rotate your device to landscape for best browsing experience.") // or pass like R.string.description_from_resources
+                .setNegativeBtnText("Cancel") // or pass it like android.R.string.cancel
+                .setPositiveBtnBackground(R.color.infoColor) // or pass it like R.color.positiveButton
+                .setPositiveBtnText("Ok") // or pass it like android.R.string.ok
+                .setNegativeBtnBackground(R.color.errorColor) // or pass it like R.color.negativeButton
+                .setGifResource(R.drawable.orientation)   //Pass your Gif here
+                .isCancellable(true)
+                .OnPositiveClicked(new FancyGifDialogListener() {
+                    @Override
+                    public void OnClick() {
+                        Toast.makeText(MainActivity.this,"Ok",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .OnNegativeClicked(new FancyGifDialogListener() {
+                    @Override
+                    public void OnClick() {
+                        Toast.makeText(MainActivity.this,"Cancel",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .build();
+
     }
+
+
 
     void setRTL(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -145,8 +189,17 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+
     final void setAdmob(){
         MobileAds.initialize(this, admob_app_id);
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+        AdView adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        adView.setAdUnitId(admob_banner_id);
 
 
 
@@ -165,6 +218,11 @@ public class MainActivity extends AppCompatActivity
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     final public void onRefresh() {
+                        if (mInterstitialAd.isLoaded()) {
+                            mInterstitialAd.show();
+                        } else {
+                            //log.d("TAG", "The intersitial wasn't loaded yet.");
+                        }
                         mWebView.reload();
                         mySwipeRefreshLayout.setRefreshing(false);
                     }
@@ -212,20 +270,16 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    final public void onActivityResult(int requestCode, int resultCode, Intent intent)
-    {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            if (requestCode == REQUEST_SELECT_FILE)
-            {
+    final public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (requestCode == REQUEST_SELECT_FILE) {
                 if (uploadMessage == null)
                     return;
                 uploadMessage.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, intent));
                 uploadMessage = null;
             }
-        }
-        else if (requestCode == FILECHOOSER_RESULTCODE)
-        {
+        } else if (requestCode == FILECHOOSER_RESULTCODE) {
             if (null == mUploadMessage)
                 return;
             // Use MainActivity.RESULT_OK if you're implementing WebViewFragment inside Fragment
@@ -233,8 +287,7 @@ public class MainActivity extends AppCompatActivity
             Uri result = intent == null || resultCode != MainActivity.RESULT_OK ? null : intent.getData();
             mUploadMessage.onReceiveValue(result);
             mUploadMessage = null;
-        }
-        else
+        } else
             Toast.makeText(getApplicationContext(), "Failed to Upload Image", Toast.LENGTH_LONG).show();
     }
 
@@ -390,6 +443,7 @@ public class MainActivity extends AppCompatActivity
 
 
             // For Lollipop 5.0+ Devices
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams)
             {
                 if (uploadMessage != null) {
@@ -623,12 +677,12 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    final void oneSignalInit() {
+    /*final void oneSignalInit() {
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
-    }
+    }*/
 
     protected void checkPermission(){
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
@@ -756,9 +810,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_contact) {
-            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "0788179100"));
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                //log.d("TAG", "The intersitial wasn't loaded yet.");
+            }
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:0788179100"));
             startActivity(intent);
-            //contact
+
         } else if (id == R.id.nav_home) {
             fragment = null;
             setTitle("WebView");
@@ -767,6 +827,11 @@ public class MainActivity extends AppCompatActivity
             mWebView.loadUrl(url);
 
         } else if (id == R.id.nav_info) {
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                //log.d("TAG", "The intersitial wasn't loaded yet.");
+            }
             frameLayout.setVisibility(View.VISIBLE);
             fragment = new About();
         } else if (id == R.id.nav_share) {
@@ -808,6 +873,7 @@ public class MainActivity extends AppCompatActivity
     private boolean canShowAppOpenAd() {
         return numActivityRestarted % 3 == 0;
     }
+
 
 
 }

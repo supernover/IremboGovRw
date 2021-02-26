@@ -38,6 +38,8 @@
             android:textStyle="italic"
             android:autoLink="all"/>
 
+
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
